@@ -1,0 +1,201 @@
+MySQL Shell 8.0.32
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost': ***************
+Save password for 'root@localhost'? [Y]es/[N]o/Ne[v]er (default No): N
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 8
+Server version: 8.0.32 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > create database eva_2;
+Query OK, 1 row affected (0.1377 sec)
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| agencia            |
+| eva_2              |
+| evaluacion_1       |
+| information_schema |
+| mysql              |
+| orders             |
+| performance_schema |
+| pokemon_world      |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+11 rows in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  SQL > \use eva_2
+Default schema set to `eva_2`.
+Fetching global names, object names from `eva_2` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table factura(
+                                      -> id int auto_increment key,
+                                      -> id_cliente int not null);
+Query OK, 0 rows affected (0.1550 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > desc factura;
++------------+------+------+-----+---------+----------------+
+| Field      | Type | Null | Key | Default | Extra          |
++------------+------+------+-----+---------+----------------+
+| id         | int  | NO   | PRI | NULL    | auto_increment |
+| id_cliente | int  | NO   |     | NULL    |                |
++------------+------+------+-----+---------+----------------+
+2 rows in set (0.0027 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into factura(id_cliente)
+                                      -> values(1);
+Query OK, 1 row affected (0.0430 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into factura(id_cliente) values(2);
+Query OK, 1 row affected (0.0523 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into factura(id_cliente) values(3);
+Query OK, 1 row affected (0.0525 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into factura(id_cliente) values(4);
+Query OK, 1 row affected (0.0346 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into factura(id_cliente) values(1);
+Query OK, 1 row affected (0.0563 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into factura(id_cliente) values(1);
+Query OK, 1 row affected (0.0301 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into factura(id_cliente) values(2);
+Query OK, 1 row affected (0.0216 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into factura(id_cliente) values(3);
+Query OK, 1 row affected (0.0417 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from eva_2
+                                      -> ;
+ERROR: 1146 (42S02): Table 'eva_2.eva_2' doesn't exist
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from factura;
++----+------------+
+| id | id_cliente |
++----+------------+
+|  1 |          1 |
+|  2 |          2 |
+|  3 |          3 |
+|  4 |          4 |
+|  5 |          1 |
+|  6 |          1 |
+|  7 |          2 |
+|  8 |          3 |
++----+------------+
+8 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table DetalleFactura(
+                                      -> id int auto_increment key,
+                                      -> id_factura int,
+                                      -> id_producto int,
+                                      -> foreign key(id_factura)
+                                      -> referencesf
+                                      -> ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'referencesf' at line 6
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table DetalleFactura( id int auto_increment key, id_factura int, id_producto int, foreign key(id_factura) references factura(id) on delete restrict on update cascade);
+Query OK, 0 rows affected (0.1643 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into DetalleFactura(id_factura, id_producto)
+                                      -> values(1,10)
+                                      -> ;
+Query OK, 1 row affected (0.0699 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into DetalleFactura(id_factura, id_producto) values(2,10) ;
+Query OK, 1 row affected (0.0628 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into DetalleFactura(id_factura, id_producto) values(3,10) ;
+Query OK, 1 row affected (0.0274 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into DetalleFactura(id_factura, id_producto) values(4,10) ;
+Query OK, 1 row affected (0.0285 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from DetalleFactura;
++----+------------+-------------+
+| id | id_factura | id_producto |
++----+------------+-------------+
+|  1 |          1 |          10 |
+|  2 |          2 |          10 |
+|  3 |          3 |          10 |
+|  4 |          4 |          10 |
++----+------------+-------------+
+4 rows in set (0.0004 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > desc DetalleFactura;
++-------------+------+------+-----+---------+----------------+
+| Field       | Type | Null | Key | Default | Extra          |
++-------------+------+------+-----+---------+----------------+
+| id          | int  | NO   | PRI | NULL    | auto_increment |
+| id_factura  | int  | YES  | MUL | NULL    |                |
+| id_producto | int  | YES  |     | NULL    |                |
++-------------+------+------+-----+---------+----------------+
+3 rows in set (0.0017 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > select distinct(id_factura) from detallefactura;
++------------+
+| id_factura |
++------------+
+|          1 |
+|          2 |
+|          3 |
+|          4 |
++------------+
+4 rows in set (0.0408 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > delete from factura where id=1;
+ERROR: 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`eva_2`.`detallefactura`, CONSTRAINT `detallefactura_ibfk_1` FOREIGN KEY (`id_factura`) REFERENCES `factura` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE)
+ MySQL  localhost:3306 ssl  eva_2  SQL > delete from factura where id=4;
+ERROR: 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`eva_2`.`detallefactura`, CONSTRAINT `detallefactura_ibfk_1` FOREIGN KEY (`id_factura`) REFERENCES `factura` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE)
+ MySQL  localhost:3306 ssl  eva_2  SQL > delete from factura where id=10;
+Query OK, 0 rows affected (0.0004 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from factura;
++----+------------+
+| id | id_cliente |
++----+------------+
+|  1 |          1 |
+|  2 |          2 |
+|  3 |          3 |
+|  4 |          4 |
+|  5 |          1 |
+|  6 |          1 |
+|  7 |          2 |
+|  8 |          3 |
++----+------------+
+8 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > update factura set id=4 where id=5;
+ERROR: 1062 (23000): Duplicate entry '4' for key 'factura.PRIMARY'
+ MySQL  localhost:3306 ssl  eva_2  SQL > update factura set id=11 where id=5;
+Query OK, 1 row affected (0.1027 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from DetalleFactura;
++----+------------+-------------+
+| id | id_factura | id_producto |
++----+------------+-------------+
+|  1 |          1 |          10 |
+|  2 |          2 |          10 |
+|  3 |          3 |          10 |
+|  4 |          4 |          10 |
++----+------------+-------------+
+4 rows in set (0.0008 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > update DetalleFactura set id_factura=12 where id_factura=10;
+Query OK, 0 rows affected (0.0007 sec)
+
+Rows matched: 0  Changed: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from DetalleFactura;
++----+------------+-------------+
+| id | id_factura | id_producto |
++----+------------+-------------+
+|  1 |          1 |          10 |
+|  2 |          2 |          10 |
+|  3 |          3 |          10 |
+|  4 |          4 |          10 |
++----+------------+-------------+
+4 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from factura;
++----+------------+
+| id | id_cliente |
++----+------------+
+|  1 |          1 |
+|  2 |          2 |
+|  3 |          3 |
+|  4 |          4 |
+|  6 |          1 |
+|  7 |          2 |
+|  8 |          3 |
+| 11 |          1 |
++----+------------+
+8 rows in set (0.0004 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > delete from detallefactura where id=2;
+Query OK, 1 row affected (0.0519 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL >
